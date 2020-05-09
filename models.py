@@ -5,9 +5,6 @@ class Project:
     def showProjectName(self):
         return self.name
 
-    def addTask(self, task):
-        self.tasks.append(task)
-
 
 class Calendar:
     def __init__(self, date):
@@ -15,9 +12,6 @@ class Calendar:
 
     def showCalendarDate(self):
         return self.date
-
-    def addTask(self, task):
-        self.tasks.append(task)
 
 
 class Task:
