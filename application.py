@@ -29,8 +29,6 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def create_task(self):
         name, ok1 = QtWidgets.QInputDialog.getText(self, "Name", "Enter a name for the task:")
         priority, ok2 = QtWidgets.QInputDialog.getItem(self, "Priority", "Choose priority:", Task.getPriority())
-        print(type(priority))
-        print(type(name))
         if ok1 and ok2 and name and priority:
             new_task = Task(name, priority)
             if self.last_action == 'calendar' or not self.last_action:
@@ -45,20 +43,18 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             w.setText("Task is not added.")
             w.exec()
 
-
     def show_tasks(self):
         self.listWidget_Tasks.clear()
 
         if self.last_action == 'projects':
             proj = self.listWidget_Projects.selectedItems()[0].text()
-            for key in self.projects[proj].keys():
-                self.listWidget_Tasks.addItem(self.projects[proj][key])
+            for one in database.fptask(proj):
+                print(type(one))
+                self.listWidget_Tasks.addItem(one)
         else:
             date = self.calendarWidget.selectedDate()
-            if self.tasks.get(hash(date)):
-                self.listWidget_Tasks.addItem(self.tasks[hash(date)])
-            else:
-                self.listWidget_Tasks.addItem(' ')
+            for one in database.fctask(date):
+                self.listWidget_Tasks.addItem(one)
 
     def edit_task(self):
         pass
