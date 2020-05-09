@@ -1,9 +1,74 @@
 from settings import *
 import pymongo
 
-myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+mongoclient = pymongo.MongoClient("mongodb://localhost:27017/")
 # f"mongodb+srv://{USER}:{PASSWORD}@cluster0-idlrk.azure.mongodb.net/test?retryWrites=true&w=majority"
-mydb = myclient["mydatabase"]
+database = mongoclient["mydatabase"]
+dbproj = database["projects"]
+dbcale = database["calendar"]
+
+
+# PROJECTS
+def nproject(name):  # new project
+    new = {"name": name, "tasks": {}}
+    dbproj.insert_one(new)
+
+
+def uproject(name, new_name):  # update
+    old = {"name": name}
+    new = {"$set": {"name": new_name}}
+    dbproj.update_one(old, new)
+
+
+def dproject(name):  # delete
+    wbd = {"name": name}
+    dbproj.delete_one(wbd)
+
+
+def fproject():  # find
+    return dbproj.find({}, {"tasks": 0})
+
+
+# PROJECT TASKS
+def nptask(proj, name, status, priority):  # new
+    new = {"name": name, "status": status, "priority": priority}
+    dbproj[proj].insert_one(new)
+
+
+def uptask(proj, name, new_name, status, priority):  # update
+    old = {"name": name}
+    new = {"$set": {"name": new_name, "status": status, "priority": priority}}
+    dbproj[proj].update_one(old, new)
+
+
+def dptask(proj, name):  # delete
+    wbd = {"name": name}
+    dbproj[proj].delete_one(wbd)
+
+
+def fptask(proj):  # find
+    return dbproj[proj]["tasks"].find({}, {"_id": 0})
+
+
+# CALENDAR TASKS
+def nctask(date, name, status, priority):  # new calendar task
+    new = {"name": name, "status": status, "priority": priority}
+    dbcale[date].insert_one(new)
+
+
+def uctask(date, name, new_name, status, priority):  # update
+    old = {"name": name}
+    new = {"$set": {"name": new_name, "status": status, "priority": priority}}
+    dbcale[date].update_one(old, new)
+
+
+def dctask(date, name):  # delete
+    wbd = {"name": name}
+    dbcale[date].delete_one(wbd)
+
+
+def fctask(date):  # find
+    return dbcale[date].find({}, {"_id": 0})
 
 
 def main():
