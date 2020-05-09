@@ -62,14 +62,20 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def delete_task(self):
         pass
 
+    def create_project(self):
+        proj, ok = QtWidgets.QInputDialog.getText(self, "Create Project", "Enter project name:")
+        if ok:
+            database.nproject(proj)
+        else:
+            w = QtWidgets.QMessageBox()
+            w.setWindowTitle("Error Message")
+            w.setText("Project is not added.")
+            w.exec()
+
     def show_projects(self):
         self.listWidget_Projects.clear()
         for key in self.projects.keys():
             self.listWidget_Projects.addItem(key)
-
-    def create_project(self):
-        proj, ok = QtWidgets.QInputDialog.getText(self, "Create Project", "Enter project name:")
-        self.projects[proj] = {}
 
     def edit_project(self):
         pass
