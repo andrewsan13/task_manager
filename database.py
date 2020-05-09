@@ -30,19 +30,19 @@ def fproject():  # find
 
 
 # PROJECT TASKS
-def nptask(proj, name, status, priority):  # new
-    new = {"name": name, "status": status, "priority": priority}
+def nptask(proj, task):  # new
+    new = {'task': task}
     dbproj[proj].insert_one(new)
 
 
-def uptask(proj, name, new_name, status, priority):  # update
-    old = {"name": name}
-    new = {"$set": {"name": new_name, "status": status, "priority": priority}}
+def uptask(proj, task, newtask):  # update
+    old = {"task": task}
+    new = {"$set": {"task": newtask}}
     dbproj[proj].update_one(old, new)
 
 
-def dptask(proj, name):  # delete
-    wbd = {"name": name}
+def dptask(proj, task):  # delete
+    wbd = {"task": task}
     dbproj[proj].delete_one(wbd)
 
 
@@ -51,19 +51,19 @@ def fptask(proj):  # find
 
 
 # CALENDAR TASKS
-def nctask(date, name, status, priority):  # new calendar task
-    new = {"name": name, "status": status, "priority": priority}
+def nctask(date, task):  # new calendar task
+    new = {'task': task}
     dbcale[date].insert_one(new)
 
 
-def uctask(date, name, new_name, status, priority):  # update
-    old = {"name": name}
-    new = {"$set": {"name": new_name, "status": status, "priority": priority}}
+def uctask(date, task, newtask):  # update
+    old = {'task': task}
+    new = {"$set": {'task': task}}
     dbcale[date].update_one(old, new)
 
 
-def dctask(date, name):  # delete
-    wbd = {"name": name}
+def dctask(date, task):  # delete
+    wbd = {'task': task}
     dbcale[date].delete_one(wbd)
 
 
