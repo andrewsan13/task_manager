@@ -9,19 +9,19 @@ dbcale = database["calendar"]
 
 
 # PROJECTS
-def nproject(name):  # new project
-    new = {"name": name, "tasks": {}}
+def nproject(project):  # new project
+    new = {"project": project, "tasks": {}}
     dbproj.insert_one(new)
 
 
-def uproject(name, new_name):  # update
-    old = {"name": name}
-    new = {"$set": {"name": new_name}}
+def uproject(project, new_data):  # update
+    old = {"project": project}
+    new = {"$set": {"project": new_data}}
     dbproj.update_one(old, new)
 
 
-def dproject(name):  # delete
-    wbd = {"name": name}
+def dproject(project):  # delete
+    wbd = {"project": project}
     dbproj.delete_one(wbd)
 
 
@@ -71,15 +71,21 @@ def fctask(date):  # find
     return dbcale[date].find({}, {"_id": 0})
 
 
+def _clearDatabase():
+    for col in database.collection_names()
+        database.drop_collection(col)
+
+
 def main():
     myclient = pymongo.MongoClient("mongodb://localhost:27017/")
     # dblist = myclient.list_database_names()
 
     mydb = myclient["mydatabase"]
-
-    mycol = mydb["customers"]
     # collist = mydb.list_collection_names()
-
+    mycol = mydb["projects"]
+    for x in mycol.find():
+        print(x)
+        print(type(x))
     # for x in mycol.find({}, {"_id": 0}):
     #     print(x)
 
