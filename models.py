@@ -1,13 +1,9 @@
 class Project:
     def __init__(self, name):
         self.name: str = name
-        self.tasks = []
 
     def showProjectName(self):
         return self.name
-
-    def showProjectTasks(self):
-        return self.tasks
 
     def addTask(self, task):
         self.tasks.append(task)
@@ -16,13 +12,9 @@ class Project:
 class Calendar:
     def __init__(self, date):
         self.date = date
-        self.tasks = []
 
     def showCalendarDate(self):
         return self.date
-
-    def showCalendarTasks(self):
-        return self.tasks
 
     def addTask(self, task):
         self.tasks.append(task)
