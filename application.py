@@ -74,8 +74,8 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
     def show_projects(self):
         self.listWidget_Projects.clear()
-        for key in self.projects.keys():
-            self.listWidget_Projects.addItem(key)
+        for project in database.fproject():
+            self.listWidget_Projects.addItem(project)
 
     def edit_project(self):
         pass
