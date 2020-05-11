@@ -1,28 +1,22 @@
-import abc
-import models
+import json
+from collections import namedtuple
+from json import JSONEncoder
+
+#  from json in obj
+def customStudentDecoder(studentDict):
+    return namedtuple('X', studentDict.keys())(*studentDict.values())
 
 
-class AbstractRepository(abc.ABC):
+# Assume you received this JSON response
+studentJsonData = '{"rollNumber": 1, "name": "Emma"}'
 
-    @abc.abstractmethod
-    def add(self, batch: models.Project):
-        raise NotImplementedError
+# Parse JSON into an object with attributes corresponding to dict keys.
+student = json.loads(studentJsonData, object_hook=customStudentDecoder)
 
-    @abc.abstractmethod
-    def get(self, reference) -> models.Project:
-        raise NotImplementedError
+print("After Converting JSON Data into Custom Python Object")
+print(student.rollNumber, student.name)
 
+# After Converting JSON Data into Custom Python Object
+# 1 Emma
 
-class PyMongoRepository(AbstractRepository):
-
-    def __init__(self, session):
-        self.session = session
-
-    def add(self, project):
-        self.session.add(project)
-
-    def get(self, reference):
-        return self.session.query(models.Project).filter_by(reference=reference).one()
-
-    def list(self):
-        return self.session.query(models.Project).all()
+#  convert into json
