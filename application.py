@@ -4,6 +4,7 @@ from PyQt5.QtCore import QDate
 import design  # наш файл дизайна
 from models import *
 import database
+import pickle
 
 
 class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
@@ -31,12 +32,13 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         priority, ok2 = QtWidgets.QInputDialog.getItem(self, "Priority", "Choose priority:", Task.getPriority())
         if ok1 and ok2 and name and priority:
             new_task = Task(name, priority)
+            dumped = pickle.dumps(new_task)
             if self.last_action == 'calendar' or not self.last_action:
                 date = self.calendarWidget.selectedDate()
-                database.nctask(date, new_task)
+                database.nctask(date, dumped)
             else:
                 proj = self.listWidget_Projects.selectedItems()[0].text()
-                database.nptask(proj, new_task)
+                database.nptask(proj, dumped)
         else:
             w = QtWidgets.QMessageBox()
             w.setWindowTitle("Error Message")
@@ -49,12 +51,13 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         if self.last_action == 'projects':
             proj = self.listWidget_Projects.selectedItems()[0].text()
             for one in database.fptask(proj):
-                print(type(one))
-                self.listWidget_Tasks.addItem(one)
+                p = pickle.loads(one['task'])
+                self.listWidget_Tasks.addItem(p.showTaskName())
         else:
             date = self.calendarWidget.selectedDate()
             for one in database.fctask(date):
-                self.listWidget_Tasks.addItem(one)
+                p = pickle.loads(one['task'])
+                self.listWidget_Tasks.addItem(p.showTaskName())
 
     def edit_task(self):
         pass
@@ -63,9 +66,11 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         pass
 
     def create_project(self):
-        proj, ok = QtWidgets.QInputDialog.getText(self, "Create Project", "Enter project name:")
+        name, ok = QtWidgets.QInputDialog.getText(self, "Create Project", "Enter project name:")
         if ok:
-            database.nproject(proj)
+            proj = Project(name)
+            dumped = pickle.dumps(proj)
+            database.nproject(dumped)
         else:
             w = QtWidgets.QMessageBox()
             w.setWindowTitle("Error Message")
@@ -74,8 +79,10 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
     def show_projects(self):
         self.listWidget_Projects.clear()
-        for project in database.fproject():
-            self.listWidget_Projects.addItem(project)
+        for one in database.fproject():
+            p = pickle.loads(one['project'])
+            if p:
+                self.listWidget_Projects.addItem(p.showProjectName())
 
     def edit_project(self):
         pass

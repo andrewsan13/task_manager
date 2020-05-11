@@ -1,8 +1,8 @@
 class Project:
     def __init__(self, name):
-        self.name: str = name
+        self.name = name
 
-    def showProjectName(self):
+    def getName(self):
         return self.name
 
 
@@ -10,7 +10,7 @@ class Calendar:
     def __init__(self, date):
         self.date = date
 
-    def showCalendarDate(self):
+    def getDate(self):
         return self.date
 
 
@@ -19,23 +19,23 @@ class Task:
     listStatus = ('In progress', 'Done')
 
     def __init__(self, name, priority, status='In progress'):
-        self.name: str = name
-        self.status: str = status
-        self.priority: str = priority
+        self.name = name
+        self.status = status
+        self.priority = priority
 
     @classmethod
-    def getPriority(cls):
+    def getlistP(cls):
         return cls.listPriority
 
     @classmethod
-    def getStatus(cls):
+    def getlistS(cls):
         return cls.listStatus
 
-    def showTaskName(self):
+    def getName(self):
         return self.name
 
-    def showTaskStatus(self):
+    def getStatus(self):
         return self.status
 
-    def showTaskPriority(self):
+    def getPriority(self):
         return self.priority

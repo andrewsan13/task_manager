@@ -1,4 +1,5 @@
 from settings import *
+import models
 import pymongo
 
 mongoclient = pymongo.MongoClient("mongodb://localhost:27017/")
@@ -72,7 +73,7 @@ def fctask(date):  # find
 
 
 def _clearDatabase():
-    for col in database.collection_names()
+    for col in database.collection_names():
         database.drop_collection(col)
 
 
