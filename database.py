@@ -10,71 +10,56 @@ dbcale = database["calendar"]
 
 
 # PROJECTS
-def nproject(project):  # new project
-    new = {"project": project, "tasks": {}}
+def addproject(project):  # new project
+    new = {'name': project['name'], 'project': project}
     dbproj.insert_one(new)
-
-
-def uproject(project, new_data):  # update
-    old = {"project": project}
-    new = {"$set": {"project": new_data}}
+def changeproject(name, project):  # update
+    old = {"name": name}
+    new = {"$set": {'name': project['name'], "project": project}}
     dbproj.update_one(old, new)
-
-
-def dproject(project):  # delete
+def deleteproject(project):  # delete
     wbd = {"project": project}
     dbproj.delete_one(wbd)
-
-
-def fproject():  # find
-    return dbproj.find({}, {"tasks": 0})
-
+def getproject():  # find
+    return dbproj.find()
 
 # PROJECT TASKS
-def nptask(proj, task):  # new
+def addptask(proj, task):  # new
     new = {'task': task}
-    dbproj[proj].insert_one(new)
-
-
-def uptask(proj, task, newtask):  # update
+    dbproj[proj]['tasks'].insert_one(new)
+def changeptask(proj, task, newtask):  # update
     old = {"task": task}
     new = {"$set": {"task": newtask}}
-    dbproj[proj].update_one(old, new)
-
-
-def dptask(proj, task):  # delete
+    dbproj[proj]['tasks'].update_one(old, new)
+def deleteptask(proj, task):  # delete
     wbd = {"task": task}
-    dbproj[proj].delete_one(wbd)
-
-
-def fptask(proj):  # find
+    dbproj[proj]['tasks'].delete_one(wbd)
+def getptask(proj):  # find
     return dbproj[proj]["tasks"].find({}, {"_id": 0})
 
-
 # CALENDAR TASKS
-def nctask(date, task):  # new calendar task
+def addctask(date, task):  # new calendar task
     new = {'task': task}
     dbcale[date].insert_one(new)
-
-
-def uctask(date, task, newtask):  # update
+def changectask(date, task, newtask):  # update
     old = {'task': task}
-    new = {"$set": {'task': task}}
+    new = {"$set": {'task': newtask}}
     dbcale[date].update_one(old, new)
-
-
-def dctask(date, task):  # delete
+def deletectask(date, task):  # delete
     wbd = {'task': task}
     dbcale[date].delete_one(wbd)
-
-
-def fctask(date):  # find
+def getctask(date):  # find
     return dbcale[date].find({}, {"_id": 0})
 
-
+# DATABASE
 def _clearDatabase():
     for col in database.collection_names():
         database.drop_collection(col)
+def _showDatabase():
+    for col in database.collection_names():
+        print("Collection name :", database[col])
+        for i in database[col].find():
+            print(i)
 
 
 def main():
@@ -83,16 +68,12 @@ def main():
 
     mydb = myclient["mydatabase"]
     # collist = mydb.list_collection_names()
-    mycol = mydb["projects"]
-    for x in mycol.find():
-        print(x)
-        print(type(x))
+
+    _showDatabase()
+
     # for x in mycol.find({}, {"_id": 0}):
     #     print(x)
 
-    # Добавить
-    # mydict = {"name": "John", "address": "Highway 37"}
-    # x = mycol.insert_one(mydict)
     # Добавить несколько
     # mylist = [{"name": "Amy", "address": "Apple st 652"},
     #           {"name": "Hannah", "address": "Mountain 21"},]
@@ -103,20 +84,11 @@ def main():
     # mydoc = mycol.find(myquery)
     # mydoc = mycol.find().sort("name", 1) сортировать по возрастанию /(-1) по убыванию
 
-    # Удалить
-    # myquery = { "address": "Mountain 21" }
-    # mycol.delete_one(myquery)
+    # Удалить много
     # myquery = { "address": {"$regex": "^S"} }
     # mycol.delete_many(myquery)
     # Удалить все mycol.delete_many( {} )
 
-    # Удалить коллекцию или таблицу
-    # mycol.drop()
-
-    # Обновить
-    # myquery = {"address": "Valley 345"}
-    # newvalues = {"$set": {"address": "Canyon 123"}}
-    # mycol.update_one(myquery, newvalues)
     # Обновить много
     # myquery = {"address": {"$regex": "^S"}}
     # newvalues = {"$set": {"name": "Minnie"}}

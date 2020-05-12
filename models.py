@@ -1,10 +1,16 @@
 class Project:
     def __init__(self, name):
         self.name = name
+        self.tasks = {}
 
     def getName(self):
         return self.name
 
+    def addtask(self, task):
+        self.tasks[task.getName()] = task
+
+    def delete(self, task):
+        del self.tasks[task.getName()]
 
 class Calendar:
     def __init__(self, date):

@@ -2,9 +2,8 @@ from PyQt5 import QtWidgets
 from PyQt5.QtCore import QDate
 
 import design  # наш файл дизайна
-from models import *
-import database
-import pickle
+from models import Task
+import convertor
 
 
 class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
@@ -32,13 +31,10 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         priority, ok2 = QtWidgets.QInputDialog.getItem(self, "Priority", "Choose priority:", Task.getPriority())
         if ok1 and ok2 and name and priority:
             new_task = Task(name, priority)
-            dumped = pickle.dumps(new_task)
             if self.last_action == 'calendar' or not self.last_action:
                 date = self.calendarWidget.selectedDate()
-                database.nctask(date, dumped)
             else:
                 proj = self.listWidget_Projects.selectedItems()[0].text()
-                database.nptask(proj, dumped)
         else:
             w = QtWidgets.QMessageBox()
             w.setWindowTitle("Error Message")
@@ -68,9 +64,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def create_project(self):
         name, ok = QtWidgets.QInputDialog.getText(self, "Create Project", "Enter project name:")
         if ok:
-            proj = Project(name)
-            dumped = pickle.dumps(proj)
-            database.nproject(dumped)
+            convertor.addproject(name)
         else:
             w = QtWidgets.QMessageBox()
             w.setWindowTitle("Error Message")
@@ -79,10 +73,9 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
     def show_projects(self):
         self.listWidget_Projects.clear()
-        for one in database.fproject():
-            p = pickle.loads(one['project'])
-            if p:
-                self.listWidget_Projects.addItem(p.showProjectName())
+        p = convertor.getprojects()
+        for project in p:
+            self.listWidget_Projects.addItem(project.getName())
 
     def edit_project(self):
         pass

@@ -2,65 +2,55 @@ import json
 from collections import namedtuple
 from json import JSONEncoder
 
+from models import *
+import database
 
-#  from json in obj !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-def customStudentDecoder(studentDict):
-    return namedtuple('X', studentDict.keys())(*studentDict.values())
-
-
-# Assume you received this JSON response
-jsonData = '{"rollNumber": 1, "name": "Emma"}'
-
-# Parse JSON into an object with attributes corresponding to dict keys.
-student = json.loads(jsonData, object_hook=customStudentDecoder)
-
-print("After Converting JSON Data into Custom Python Object")
-print(student.rollNumber, student.name)
-# After Converting JSON Data into Custom Python Object
-# 1 Emma
+# JSON
+#  from json to obj
+def objectDecoder(objdict):
+    return namedtuple('X', objdict.keys())(*objdict.values())
 
 
-#  convert into json !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-class Student:
-    def __init__(self, rollNumber, name, marks):
-        self.rollNumber, self.name, self.marks = rollNumber, name, marks
-
-
-class Marks:
-    def __init__(self, english, geometry):
-        self.english, self.geometry = english, geometry
-
-
-class StudentEncoder(JSONEncoder):
+#  convert to json
+class objectEncoder(JSONEncoder):
     def default(self, o):
         return o.__dict__
 
 
-def customStudentDecoder(studentDict):
-    return namedtuple('X', studentDict.keys())(*studentDict.values())
+def convert_to_dict(obj):
+    return json.dumps(obj, indent=4, cls=objectEncoder)
 
 
-marks = Marks(82, 74)
-student = Student(1, "Emma", marks)
+def convert_to_obj(values):
+    return json.loads(values, object_hook=objectDecoder)
 
-# dumps() produces JSON in native str format. if you want to writ it in file use dump()
-studentJson = json.dumps(student, indent=4, cls=StudentEncoder)
-print("Student JSON")
-print(studentJson)
 
-# Parse JSON into an object with attributes corresponding to dict keys.
-studObj = json.loads(studentJson, object_hook=customStudentDecoder)
-
-print("After Converting JSON Data into Custom Python Object")
-print(studObj.rollNumber, studObj.name, studObj.marks.english, studObj.marks.geometry)
-# Student JSON
-# {
-#     "rollNumber": 1,
-#     "name": "Emma",
-#     "marks": {
-#         "english": 82,
-#         "geometry": 74
-#     }
-# }
-# After Converting JSON Data into Custom Python Object
-# 1 Emma 82 74
+# DATA
+def addproject(name):
+    temp = convert_to_dict(Project(name))
+    database.addproject(temp)
+def addprojecttask():
+    pass
+def addcalendartask():
+    pass
+def updateproject():
+    pass
+def updateprojecttask():
+    pass
+def updatecalendartask():
+    pass
+def deleteproject():
+    pass
+def deleteprojecttask():
+    pass
+def deletecalendartask():
+    pass
+def getprojects():
+    data = database.dbproj.find()
+    print(data)
+    river = data['project']
+    return convert_to_obj(river)
+def getprojecttask():
+    pass
+def getcalendartask():
+    pass
