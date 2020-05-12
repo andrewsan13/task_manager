@@ -35,12 +35,12 @@ def deleteptask(proj, task):  # delete
     wbd = {"task": task}
     dbproj[proj]['tasks'].delete_one(wbd)
 def getptask(proj):  # find
-    return dbproj[proj]["tasks"].find({}, {"_id": 0})
+    return dbproj[proj]["tasks"].find()
 
 # CALENDAR TASKS
 def addctask(date, task):  # new calendar task
     new = {'task': task}
-    dbcale[date].insert_one(new)
+    dbcale[date]['tasks'].insert_one(new)
 def changectask(date, task, newtask):  # update
     old = {'task': task}
     new = {"$set": {'task': newtask}}
@@ -49,7 +49,7 @@ def deletectask(date, task):  # delete
     wbd = {'task': task}
     dbcale[date].delete_one(wbd)
 def getctask(date):  # find
-    return dbcale[date].find({}, {"_id": 0})
+    return dbcale[date]['tasks'].find()
 
 # DATABASE
 def _clearDatabase():
