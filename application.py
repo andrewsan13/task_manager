@@ -75,7 +75,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.listWidget_Projects.clear()
         p = convertor.getprojects()
         for project in p:
-            self.listWidget_Projects.addItem(project.getName())
+            self.listWidget_Projects.addItem(project.name)
 
     def edit_project(self):
         pass

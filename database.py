@@ -11,7 +11,7 @@ dbcale = database["calendar"]
 
 # PROJECTS
 def addproject(project):  # new project
-    new = {'name': project['name'], 'project': project}
+    new = {'project': project}
     dbproj.insert_one(new)
 def changeproject(name, project):  # update
     old = {"name": name}
@@ -20,7 +20,7 @@ def changeproject(name, project):  # update
 def deleteproject(project):  # delete
     wbd = {"project": project}
     dbproj.delete_one(wbd)
-def getproject():  # find
+def getprojects():  # find
     return dbproj.find()
 
 # PROJECT TASKS

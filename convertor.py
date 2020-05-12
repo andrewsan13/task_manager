@@ -46,10 +46,12 @@ def deleteprojecttask():
 def deletecalendartask():
     pass
 def getprojects():
-    data = database.dbproj.find()
-    print(data)
-    river = data['project']
-    return convert_to_obj(river)
+    data = database.getprojects()
+    temp = []
+    for each in data:
+        proj = convert_to_obj(each['project'])
+        temp.append(proj)
+    return temp
 def getprojecttask():
     pass
 def getcalendartask():
