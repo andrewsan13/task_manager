@@ -12,52 +12,49 @@ dbcale = database["calendar"]
 
 # PROJECTS
 def addproject(name, project):  # new project
-    new = {'name': name, 'project': project, 'tasks': {}}
+    new = {'name': name, 'project': project}
     dbproj.insert_one(new)
 def editproject(last, newname, project):  # update
     old = {"name": last}
-    # tasks = findoneproject(last)['tasks']
     new = {"$set": {'name': newname, "project": project}}
+    dbproj[newname]['tasks'] = dbproj[last]['tasks']  # таски со старого имени кидаем в новое
     dbproj.update_one(old, new)
-def deleteproject(project):  # delete
-    wbd = {"project": project}
+    if dbproj[last]:
+        del dbproj[last]  # удаляем таски старого имени
+def deleteproject(name):  # delete
+    wbd = {"name": name}
     dbproj.delete_one(wbd)
+    if dbproj[name]:
+        del dbproj[name]  # Удаляем таски этого проэкта dbproj[name]['tasks']
 def getprojects():  # find
     return dbproj.find()
 def findoneproject(name):
     return dbproj.find_one({'name': name})
 
 # PROJECT TASKS
-def addptask(proj, task):  # new
-    name = findoneproject(proj)
-    name['tasks'].update({'_id': ObjectId(), 'task': task})
-    new = {"$set": {'name': name['name'], 'project': name['project'], 'tasks': name['tasks']}}
-    dbproj.update_one({'name': name['name']}, new)
-    # dbproj[name]['tasks'].insert_one(new)
-def editptask(proj, task, newtask):  # update
-    old = {"task": task}
-    new = {"$set": {"task": newtask}}
+def addptask(proj, taskname, task):  # new
+    new = {'name': taskname, 'task': task}
+    dbproj[proj]['tasks'].insert_one(new)
+def editptask(proj, oldname, newname, task):  # update
+    old = {"name": oldname}
+    new = {"$set": {'name': newname, "task": task}}
     dbproj[proj]['tasks'].update_one(old, new)
-def deleteptask(proj, task):  # delete
-    wbd = {"task": task}
+def deleteptask(proj, name):  # delete
+    wbd = {"name": name}
     dbproj[proj]['tasks'].delete_one(wbd)
 def getptask(proj):  # find
-    obj = findoneproject(proj)
-    tmp = []
-    for i in obj['tasks']:
-        tmp.append(i[1])
-    return tmp
+    return dbproj[proj]['tasks'].find()
 
 # CALENDAR TASKS
-def addctask(date, task):  # new calendar task
-    new = {'task': task}
+def addctask(date, name, task):  # new calendar task
+    new = {'name': name, 'task': task}
     dbcale[date]['tasks'].insert_one(new)
-def editctask(date, task, newtask):  # update
-    old = {'task': task}
-    new = {"$set": {'task': newtask}}
+def editctask(date, oldname, newname, task):  # update
+    old = {'name': oldname}
+    new = {"$set": {'name': newname, 'task': task}}
     dbcale[date].update_one(old, new)
-def deletectask(date, task):  # delete
-    wbd = {'task': task}
+def deletectask(date, name):  # delete
+    wbd = {'name': name}
     dbcale[date].delete_one(wbd)
 def getctask(date):  # find
     return dbcale[date]['tasks'].find()

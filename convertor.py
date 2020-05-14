@@ -27,32 +27,36 @@ def convert_to_obj(values):
 
 # DATA
 def addproject(name):
-    tmp = convert_to_dict(Project(name))
-    database.addproject(name, tmp)
+    proj = convert_to_dict(Project(name))
+    database.addproject(name, proj)
 def addprojecttask(proj, name, priority):
     new = Task(name, priority)
-    tmp = convert_to_dict(new)
-    database.addptask(proj, tmp)
+    task = convert_to_dict(new)
+    database.addptask(proj, name, task)
 def addcalendartask(date, name, priority):
     new = Task(name, priority)
-    tmp = convert_to_dict(new)
-    database.addctask(date, tmp)
+    task = convert_to_dict(new)
+    database.addctask(date, name, task)
 
 def editproject(oldname, newname):
     proj = Project(newname)
     updated = convert_to_dict(proj)
     database.editproject(oldname, newname, updated)
-def editprojecttask():
-    pass
-def editcalendartask():
-    pass
+def editprojecttask(project, oldname, newname, priority, status):
+    task = Task(newname, priority, status)
+    new = convert_to_dict(task)
+    database.editptask(project, oldname, newname, new)
+def editcalendartask(date, oldname, newname, priority, status):
+    task = Task(newname, priority, status)
+    new = convert_to_dict(task)
+    database.editctask(date, oldname, newname, new)
 
-def deleteproject():
-    pass
-def deleteprojecttask():
-    pass
-def deletecalendartask():
-    pass
+def deleteproject(name):
+    database.deleteproject(name)
+def deleteprojecttask(proj, taskname):
+    database.deleteptask(proj, taskname)
+def deletecalendartask(date, name):
+    database.deletectask(date, name)
 
 def getprojects():
     data = database.getprojects()
