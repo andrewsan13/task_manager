@@ -28,7 +28,7 @@ def convert_to_obj(values):
 # DATA
 def addproject(name):
     tmp = convert_to_dict(Project(name))
-    database.addproject(tmp)
+    database.addproject(name, tmp)
 def addprojecttask(proj, name, priority):
     new = Task(name, priority)
     tmp = convert_to_dict(new)
@@ -37,18 +37,23 @@ def addcalendartask(date, name, priority):
     new = Task(name, priority)
     tmp = convert_to_dict(new)
     database.addctask(date, tmp)
-def updateproject():
+
+def editproject(oldname, newname):
+    proj = Project(newname)
+    updated = convert_to_dict(proj)
+    database.editproject(oldname, newname, updated)
+def editprojecttask():
     pass
-def updateprojecttask():
+def editcalendartask():
     pass
-def updatecalendartask():
-    pass
+
 def deleteproject():
     pass
 def deleteprojecttask():
     pass
 def deletecalendartask():
     pass
+
 def getprojects():
     data = database.getprojects()
     tmp = []
@@ -60,7 +65,7 @@ def getprojecttask(proj):
     data = database.getptask(proj)
     tmp = []
     for each in data:
-        task = convert_to_obj(each['task'])
+        task = convert_to_obj(each)
         tmp.append(task)
     return tmp
 def getcalendartask(date):
