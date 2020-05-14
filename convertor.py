@@ -69,7 +69,7 @@ def getprojecttask(proj):
     data = database.getptask(proj)
     tmp = []
     for each in data:
-        task = convert_to_obj(each)
+        task = convert_to_obj(each['task'])
         tmp.append(task)
     return tmp
 def getcalendartask(date):
