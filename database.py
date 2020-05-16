@@ -88,7 +88,7 @@ def getctask(date):  # find
 
 # DATABASE
 def _clearDatabase():
-    for each in col.list_collection_names()
+    for each in col.list_collection_names():
         col.drop_collection(each)
 
 
