@@ -6,11 +6,11 @@ need to install:
     MongoDB
 
 for database on localhost:
-    PyQt5
-    pymongo
+    pip install PyQt5
+    pip install pymongo
 
 for database on the server:
-    pydns
+    pip install dnspython
 
 ## from setting import * in database.py
 ## and settings.py deleted from repo
