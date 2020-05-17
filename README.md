@@ -2,6 +2,8 @@
 python task manager for Projects or some date in Calendar
 
 need to install:
+    python 3.6 or higher
+    MongoDB
 
 for database on localhost:
     PyQt5
