@@ -3,9 +3,9 @@ import models
 import pymongo
 from bson.objectid import ObjectId
 
-# mongoclient = pymongo.MongoClient("mongodb://localhost:27017/")
-mongoclient = pymongo.MongoClient(
-    f"mongodb+srv://{USER}:{PASSWORD}@cluster0-idlrk.azure.mongodb.net/test?retryWrites=true&w=majority", connect=False)
+mongoclient = pymongo.MongoClient("mongodb://localhost:27017/")
+# mongoclient = pymongo.MongoClient(
+    # f"mongodb+srv://{USER}:{PASSWORD}@cluster0-idlrk.azure.mongodb.net/test?retryWrites=true&w=majority", connect=False)
 
 # db = mongoclient.test
 database = mongoclient["taskmanager"]
