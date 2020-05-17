@@ -9,8 +9,9 @@ mongoclient = pymongo.MongoClient(
 
 # db = mongoclient.test
 database = mongoclient["taskmanager"]
-dbproj = database["projects"]
-dbcale = database["calendar"]
+col = database[USER]
+dbproj = col["projects"]
+dbcale = col["calendar"]
 
 
 # PROJECTS
@@ -87,8 +88,8 @@ def getctask(date):  # find
 
 # DATABASE
 def _clearDatabase():
-    for col in database.collection_names():
-        database.drop_collection(col)
+    for each in col.list_collection_names()
+        col.drop_collection(each)
 
 
 def _showDatabase():
