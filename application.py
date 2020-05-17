@@ -58,6 +58,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                 self.message_error("Task", 'added')
         else:
             self.message_error("Task", 'added')
+        self.show_tasks()
 
     def show_tasks(self):
         self.listWidget_Tasks.clear()
@@ -90,6 +91,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                 self.message_error('Task', 'updated')
         else:
             self.message_error('Task', 'updated')
+        self.show_tasks()
 
     def delete_task(self):
         task = self.listWidget_Tasks.selectedItems()[0].text()
@@ -99,6 +101,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         else:
             date = self.calendarWidget.selectedDate()
             convertor.deletecalendartask(date, task)
+        self.show_tasks()
 
     def search(self):
         pass
