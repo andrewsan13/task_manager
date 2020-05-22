@@ -133,6 +133,8 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         proj = self.listWidget_Projects.selectedItems()[0].text()
         convertor.deleteproject(proj)
         self.show_projects()
+        self.change_action_calendar()
+        self.show_tasks()
 
     def current_date(self):
         self.calendarWidget.showToday()

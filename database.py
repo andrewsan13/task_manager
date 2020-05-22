@@ -32,8 +32,8 @@ def editproject(last, newname, project):  # update
 def deleteproject(name):  # delete
     wbd = {"name": name}
     dbproj.delete_one(wbd)
-    if dbproj[name]:
-        del dbproj[name]  # Удаляем таски этого проэкта dbproj[name]['tasks']
+    if dbproj[name]['tasks']:
+        dbproj[name]['tasks'].delete_many( {} ) # Удаляем таски этого проэкта dbproj[name]['tasks']
 
 
 def getprojects():  # find
@@ -79,7 +79,7 @@ def editctask(date, oldname, newname, task):  # update
 
 def deletectask(date, name):  # delete
     wbd = {'name': name}
-    dbcale[date].delete_one(wbd)
+    dbcale[date]['tasks'].delete_one(wbd)
 
 
 def getctask(date):  # find
