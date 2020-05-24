@@ -104,7 +104,8 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.show_tasks()
 
     def search(self):
-        pass
+        tasks = convertor.find_all()
+        
 
     def create_project(self):
         name, ok = QtWidgets.QInputDialog.getText(self, "Create Project", "Enter project name:")

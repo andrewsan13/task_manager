@@ -43,6 +43,9 @@ def getprojects():  # find
 def findoneproject(name):
     return dbproj.find_one({'name': name})
 
+def getdates():
+    return dbcale.find()
+
 
 # PROJECT TASKS
 def addptask(proj, taskname, task):  # new

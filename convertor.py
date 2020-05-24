@@ -79,3 +79,16 @@ def getcalendartask(date):
         task = convert_to_obj(each['task'])
         tmp.append(task)
     return tmp
+
+def get_all():
+    tmp = []
+    ps = database.getprojects()
+    ds = database.getdates()
+    for i in ps:
+        tasks = getprojecttask(i['name'])
+        tmp.extend(tasks)
+    for i in ds:
+        tasks = getcalendartask(i)
+        tmp.extend(tasks)
+    print(tmp)
+
