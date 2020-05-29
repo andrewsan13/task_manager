@@ -33,8 +33,7 @@ def deleteproject(name):  # delete
     wbd = {"name": name}
     dbproj.delete_one(wbd)
     if dbproj[name]['tasks']:
-        dbproj.drop_collection(name)
-        # dbproj[name]['tasks'].delete_many( {} ) # Удаляем таски этого проэкта dbproj[name]['tasks']
+        dbproj[name]['tasks'].delete_many( {} ) # Удаляем таски этого проэкта dbproj[name]['tasks']
 
 
 def getprojects():  # find
@@ -92,9 +91,8 @@ def getctask(date):  # find
 
 # DATABASE
 def _clearDatabase():
-    for one in database.list_collection_names():
-        database.drop_collection(one)
-
+    for each in col.list_collection_names():
+        col.drop_collection(each)
 
 
 def _showDatabase():
@@ -105,10 +103,10 @@ def _showDatabase():
 
 
 def main():
-    # myclient = pymongo.MongoClient("mongodb://localhost:27017/")
+    myclient = pymongo.MongoClient("mongodb://localhost:27017/")
     # dblist = myclient.list_database_names()
 
-    # mydb = myclient["mydatabase"]
+    mydb = myclient["mydatabase"]
     # collist = mydb.list_collection_names()
 
     _clearDatabase()
