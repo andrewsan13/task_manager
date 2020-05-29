@@ -72,7 +72,12 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
                 self.listWidget_Tasks.addItem(one.name)
 
     def edit_task(self):
-        oldname = self.listWidget_Tasks.selectedItems()[0].text()
+        try:
+            oldname = self.listWidget_Tasks.selectedItems()[0].text()
+        except IndexError:
+            self.message_error('Task', 'exist')
+            return
+
         name, ok1 = QtWidgets.QInputDialog.getText(self, "Name", f"Current name: {oldname}\nEnter a name for the task:")
         if ok1 and name:
             priority, ok2 = QtWidgets.QInputDialog.getItem(self, "Priority", "Choose priority:", Task.listPriority)
@@ -94,7 +99,12 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.show_tasks()
 
     def delete_task(self):
-        task = self.listWidget_Tasks.selectedItems()[0].text()
+        try:
+            task = self.listWidget_Tasks.selectedItems()[0].text()
+        except IndexError:
+            self.message_error('Task', 'exist')
+            return
+
         if self.last_action == 'projects':
             proj = self.listWidget_Projects.selectedItems()[0].text()
             convertor.deleteprojecttask(proj, task)
@@ -122,7 +132,12 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
             self.listWidget_Projects.addItem(project.name)
 
     def edit_project(self):
-        proj = self.listWidget_Projects.selectedItems()[0].text()
+        try:
+            proj = self.listWidget_Projects.selectedItems()[0].text()
+        except IndexError:
+            self.message_error('Project', 'exist')
+            return
+
         name, ok = QtWidgets.QInputDialog.getText(self, "Create Project", f"Current name: {proj}\nEnter new name:")
         if ok and name:
             convertor.editproject(proj, name)
@@ -131,7 +146,12 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.show_projects()
 
     def delete_project(self):
-        proj = self.listWidget_Projects.selectedItems()[0].text()
+        try:
+            proj = self.listWidget_Projects.selectedItems()[0].text()
+        except IndexError:
+            self.message_error('Project', 'exist')
+            return
+
         convertor.deleteproject(proj)
         self.show_projects()
         self.change_action_calendar()
