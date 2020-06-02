@@ -2,10 +2,8 @@ import models
 import pymongo
 
 mongoclient = pymongo.MongoClient("mongodb://localhost:27017/")
-# mongoclient = pymongo.MongoClient(
-    # f"mongodb+srv://{USER}:{PASSWORD}@cluster0-idlrk.azure.mongodb.net/test?retryWrites=true&w=majority", connect=False)
-
 database = mongoclient["taskmanager"]
+
 dbproj = database["projects"]
 dbcale = database["calendar"]
 
@@ -21,15 +19,20 @@ def editproject(last, newname, project):  # update
     new = {"$set": {'name': newname, "project": project}}
     dbproj[newname]['tasks'] = dbproj[last]['tasks']  # таски со старого имени кидаем в новое
     dbproj.update_one(old, new)
-    if dbproj[last]:
-        del dbproj[last]  # удаляем таски старого имени
+    if dbproj[last]['tasks']:
+        database.drop_collection(f'projects.{last}.tasks')  # удаляем таски старого имени
 
 
 def deleteproject(name):  # delete
     wbd = {"name": name}
-    dbproj.delete_one(wbd)
-    if dbproj[name]:
-        del dbproj[name]  # Удаляем таски этого проэкта dbproj[name]['tasks']
+    dbproj.delete_many(wbd)
+    if dbproj[name]['tasks']:
+        database.drop_collection(f'projects.{name}.tasks') # Удаляем таски этого проэкта dbproj[name]['tasks']
+    tmp = []
+    for i in getprojects():
+        tmp.append(i)
+    if not tmp:
+        database.drop_collection('projects')
 
 
 def getprojects():  # find
@@ -38,6 +41,9 @@ def getprojects():  # find
 
 def findoneproject(name):
     return dbproj.find_one({'name': name})
+
+def getdates():
+    return dbcale.find()
 
 
 # PROJECT TASKS
@@ -55,7 +61,7 @@ def editptask(proj, oldname, newname, task):  # update
 def deleteptask(proj, name):  # delete
     wbd = {"name": name}
     dbproj[proj]['tasks'].delete_one(wbd)
-
+    
 
 def getptask(proj):  # find
     return dbproj[proj]['tasks'].find()
@@ -75,7 +81,12 @@ def editctask(date, oldname, newname, task):  # update
 
 def deletectask(date, name):  # delete
     wbd = {'name': name}
-    dbcale[date].delete_one(wbd)
+    dbcale[date]['tasks'].delete_one(wbd)
+    tmp = []
+    for each in dbcale[date]['tasks'].find():
+        tmp.append(each)
+    if not tmp:
+        database.drop_collection(f'calendar.PyQt5.QtCore.QDate({date.year()}, {date.month()}, {date.day()}).tasks')
 
 
 def getctask(date):  # find
@@ -84,16 +95,14 @@ def getctask(date):  # find
 
 # DATABASE
 def _clearDatabase():
-    for col in database.collection_names():
-        database.drop_collection(col)
+    for one in database.list_collection_names():
+        database.drop_collection(one)
+
 
 
 def _showDatabase():
-    for col in database.collection_names():
-        print("Collection name :", database[col])
-        for i in database[col].find():
-            print(i)
-
+    for col in database.list_collection_names():
+        print("Collection name :", col)
 
 def main():
     myclient = pymongo.MongoClient("mongodb://localhost:27017/")
