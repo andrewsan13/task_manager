@@ -114,7 +114,12 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.show_tasks()
 
     def search(self):
-        tasks = convertor.find_all()
+        self.listWidget_Tasks.clear()
+        tasks = convertor.get_all()
+        for task in tasks:
+            self.listWidget_Tasks.addItem(task.name)
+        
+
         
 
     def create_project(self):
